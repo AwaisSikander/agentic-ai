@@ -12,13 +12,16 @@ export class AIClient {
 
   async generate(messages, options = {}) {
     try {
-      const { json, ...apiOptions } = options;
+      const { json, temperature, ...apiOptions } = options;
+
+      const isNano = config.model.default.includes("nano");
+      const safeTemperature = isNano ? 1 : temperature ?? 0.7;
 
       const response = await this.client.chat.completions.create({
         model: config.model.default,
         messages: messages,
         response_format: json ? { type: "json_object" } : undefined,
-        temperature: 1,
+        temperature: safeTemperature,
         ...apiOptions,
       });
 

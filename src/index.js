@@ -1,21 +1,26 @@
-import { AIClient } from "./core/llm.js";
+import { runSystemCheck } from "./commands/check.js";
+import { runTicketClassifier } from "./commands/classify.js";
 
 async function main() {
-  const ai = new AIClient();
+  const command = process.argv[2];
 
-  const systemPrompt = {
-    role: "system",
-    content: "You are a specialized JSON generator. Output current status.",
-  };
+  switch (command) {
+    case "check":
+      await runSystemCheck();
+      break;
 
-  const userPrompt = {
-    role: "user",
-    content: "Initialize system check.",
-  };
+    case "classify":
+      await runTicketClassifier();
+      break;
 
-  const result = await ai.generate([systemPrompt, userPrompt], { json: true });
-
-  console.log(result.content);
+    default:
+      console.log("⚠️  Unknown Command.");
+      console.log("Usage: npm start <command>");
+      console.log("Commands:");
+      console.log("  check      -> Run LLM connection test");
+      console.log("  classify   -> Run support ticket agent");
+      break;
+  }
 }
 
 main();
