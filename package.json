@@ -1,0 +1,28 @@
+{
+  "name": "agentic-ai-core",
+  "version": "1.0.0",
+  "description": "Enterprise-grade Agentic AI orchestration system built with Node.js and OpenAI GPT-5 Nano. Features autonomous tool execution, structured JSON outputs, and stateful agent memory.",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "keywords": [
+    "ai",
+    "agentic-ai",
+    "openai",
+    "gpt-5",
+    "automation",
+    "llm",
+    "function-calling",
+    "nodejs"
+  ],
+  "author": "Awais Sikander",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "openai": "^6.14.0",
+    "zod": "^4.2.1"
+  }
+}
