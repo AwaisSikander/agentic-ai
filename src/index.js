@@ -1,5 +1,6 @@
 import { runSystemCheck } from "./commands/check.js";
 import { runTicketClassifier } from "./commands/classify.js";
+import { runSupportBot } from "./commands/support.js";
 
 async function main() {
   const command = process.argv[2];
@@ -11,6 +12,10 @@ async function main() {
 
     case "classify":
       await runTicketClassifier();
+      break;
+
+    case "support":
+      await runSupportBot();
       break;
 
     default:
