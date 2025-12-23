@@ -2,6 +2,7 @@ import { runSystemCheck } from "./commands/check.js";
 import { runTicketClassifier } from "./commands/classify.js";
 import { runSupportBot } from "./commands/support.js";
 import { runQABot } from "./commands/qa.js";
+import { runChatMode } from "./commands/chat.js";
 
 async function main() {
   const command = process.argv[2];
@@ -21,6 +22,10 @@ async function main() {
 
     case "qa":
       await runQABot();
+      break;
+
+    case "chat":
+      await runChatMode();
       break;
 
     default:
