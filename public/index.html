@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Agentic AI Support</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #f0f2f5;
+      }
+      #chat-box {
+        height: 400px;
+        overflow-y: scroll;
+        border: 1px solid #ccc;
+        background: white;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+      }
+      .message {
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 8px;
+        max-width: 80%;
+      }
+      .user {
+        background: #007bff;
+        color: white;
+        margin-left: auto;
+      }
+      .assistant {
+        background: #e4e6eb;
+        color: black;
+      }
+      .loading {
+        font-style: italic;
+        color: #666;
+        font-size: 0.9em;
+      }
+      #input-area {
+        display: flex;
+        gap: 10px;
+      }
+      input {
+        flex: 1;
+        padding: 10px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+      }
+      button {
+        padding: 10px 20px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>🤖 AI Support Agent</h2>
+    <div id="chat-box"></div>
+    <div id="input-area">
+      <input type="text" id="user-input" placeholder="Type a message..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+      let history = [
+        { role: "system", content: "You are a helpful assistant." },
+      ];
+
+      async function sendMessage() {
+        const input = document.getElementById("user-input");
+        const chatBox = document.getElementById("chat-box");
+        const text = input.value;
+        if (!text) return;
+
+        addMessage("user", text);
+        input.value = "";
+        history.push({ role: "user", content: text });
+
+        const loadingId = "loading-" + Date.now();
+        chatBox.innerHTML += `<div id="${loadingId}" class="loading">Agent is thinking...</div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        try {
+          const response = await fetch("http://localhost:3000/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ history: history }),
+          });
+
+          const data = await response.json();
+          history = data.history;
+
+          document.getElementById(loadingId).remove();
+          const lastMsg = history[history.length - 1];
+          addMessage("assistant", lastMsg.content);
+        } catch (err) {
+          document.getElementById(loadingId).innerText =
+            "Error: Server Offline";
+        }
+      }
+
+      function addMessage(role, text) {
+        const chatBox = document.getElementById("chat-box");
+        const div = document.createElement("div");
+        div.className = `message ${role}`;
+        div.innerText = text;
+        chatBox.appendChild(div);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+    </script>
+  </body>
+</html>
