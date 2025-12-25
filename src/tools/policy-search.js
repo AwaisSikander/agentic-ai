@@ -1,16 +1,27 @@
 import { VectorStore } from "../core/vector-db.js";
+import { ragStore } from "../core/rag-store.js";
 
 const db = new VectorStore();
+const store = ragStore;
 
-export async function initializeKnowledge() {
-  console.log("📚 Loading Corporate Policies...");
-  await db.addDocument(
-    "Refund Policy: Returns allowed within 30 days. 100% money back."
-  );
-  await db.addDocument(
-    "Shipping: We ship to USA/Canada. Delivery takes 3-5 days."
-  );
-  await db.addDocument("Hours: Support is open 24/7.");
+export async function initializeKnowledge(useLegacy = false) {
+  if (useLegacy) {
+    console.log("📚 Loading Corporate Policies old store...");
+    await db.addDocument(
+      "Refund Policy: Returns allowed within 30 days. 100% money back."
+    );
+    await db.addDocument(
+      "Shipping: We ship to USA/Canada. Delivery takes 3-5 days."
+    );
+    await db.addDocument("Hours: Support is open 24/7.");
+  } else {
+    console.log("📚 Loading Corporate Policies... new store");
+    await store.addDocuments([
+      "Refund Policy: Returns allowed within 30 days. 100% money back.",
+      "Shipping Policy: Orders ship within 3–5 business days.",
+      "Support Hours: Customer support is available 24/7.",
+    ]);
+  }
 }
 
 export async function searchPolicies(query) {

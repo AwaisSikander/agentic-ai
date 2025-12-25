@@ -1,6 +1,7 @@
 import { AIClient } from "../core/llm.js";
 import { getOrderDetails } from "../tools/order-lookup.js";
-import { searchPolicies } from "../tools/policy-search.js";
+// import { searchPolicies } from "../tools/policy-search.js";
+import { runRAG } from "./rag-orchestrator.js";
 
 const ai = new AIClient();
 
@@ -26,7 +27,8 @@ export async function executeTask(plan, history) {
   }
 
   if (plan.action === "policy_search") {
-    const result = await searchPolicies(plan.input);
+    // const result = await searchPolicies(plan.input);
+    const result = await runRAG(plan.input);
 
     console.log("\n[POLICY SEARCH RESULT]");
     console.log(result);
