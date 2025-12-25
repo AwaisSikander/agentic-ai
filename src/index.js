@@ -4,6 +4,7 @@ import { runSupportBot } from "./commands/support.js";
 import { runQABot } from "./commands/qa.js";
 import { runChatMode } from "./commands/chat.js";
 import { runSuperAgent } from "./agents/super-agent.js";
+import { runOrchestratedAgentCLI } from "./commands/agent-orchestrated.js";
 
 async function main() {
   const command = process.argv[2];
@@ -31,6 +32,9 @@ async function main() {
 
     case "agent":
       await runSuperAgent();
+      break;
+    case "agent:orchestrated":
+      await runOrchestratedAgentCLI();
       break;
 
     default:

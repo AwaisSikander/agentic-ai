@@ -16,6 +16,11 @@ export async function initializeKnowledge() {
 export async function searchPolicies(query) {
   console.log(`📖 SEARCHING KNOWLEDGE for: "${query}"...`);
   const result = await db.search(query);
+
+  if (!result) {
+    return "No relevant policy found in the knowledge base.";
+  }
+
   return `Policy Found: "${result.text}" (Relevance: ${(
     result.similarity * 100
   ).toFixed(1)}%)`;
