@@ -5,7 +5,7 @@ import { runRAG } from "./rag-orchestrator.js";
 
 const ai = new AIClient();
 
-export async function executeTask(plan, history) {
+export async function executeTask(plan, history, options = {}) {
   console.log("\n[EXECUTOR RECEIVED PLAN]");
   console.log(plan);
 
@@ -28,7 +28,7 @@ export async function executeTask(plan, history) {
 
   if (plan.action === "policy_search") {
     // const result = await searchPolicies(plan.input);
-    const result = await runRAG(plan.input);
+    const result = await runRAG(plan.input, options);
 
     console.log("\n[POLICY SEARCH RESULT]");
     console.log(result);
@@ -45,7 +45,9 @@ export async function executeTask(plan, history) {
     throw new Error("Executor blocked: required context was not injected");
   }
 
-  const response = await ai.generate(context);
+  const response = await ai.generate(context, {
+    useLocal: options.useLocal,
+  });
 
   console.log("\n[RAW EXECUTOR ANSWER]");
   console.log(response.content);

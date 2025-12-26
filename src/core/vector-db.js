@@ -8,22 +8,14 @@ export class VectorStore {
   }
 
   async addDocument(text) {
-    const response = await this.ai.client.embeddings.create({
-      model: "text-embedding-3-small", // The cheapest embedding model
-      input: text,
-    });
-
-    const vector = response.data[0].embedding;
-    this.store.push({ text, vector });
+    const response = await this.ai.embed(text);
+    this.store.push({ text, response });
   }
 
   async search(query) {
     // 1. Convert the USER'S question into numbers
-    const response = await this.ai.client.embeddings.create({
-      model: "text-embedding-3-small",
-      input: query,
-    });
-    const queryVector = response.data[0].embedding;
+    const response = await this.ai.embed(query);
+    const queryVector = response;
 
     // 2. Compare against every document in the store
     const results = this.store.map((doc) => ({

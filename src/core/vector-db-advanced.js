@@ -9,25 +9,18 @@ export class AdvancedVectorStore {
 
   async addDocuments(texts) {
     for (const text of texts) {
-      const res = await this.ai.client.embeddings.create({
-        model: "text-embedding-3-small",
-        input: text,
-      });
+      const res = await this.ai.embed(text);
 
       this.store.push({
         text,
-        vector: res.data[0].embedding,
+        vector: res,
       });
     }
   }
 
   async search(query, topK = 5) {
-    const res = await this.ai.client.embeddings.create({
-      model: "text-embedding-3-small",
-      input: query,
-    });
-
-    const queryVector = res.data[0].embedding;
+    const res = await this.ai.embed(query);
+    const queryVector = res;
 
     return this.store
       .map((doc) => ({

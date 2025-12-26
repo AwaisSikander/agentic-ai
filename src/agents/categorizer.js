@@ -20,7 +20,8 @@ export class CategorizerAgent {
       RULES:
       1. High priority is for system outages or payment failures.
       2. Low priority is for general questions.
-      3. Be strict.`,
+      3. Be strict.
+      4. Make sure the output is valid JSON only.`,
     };
 
     const userPrompt = {
@@ -31,7 +32,6 @@ export class CategorizerAgent {
     const result = await this.ai.generate([systemPrompt, userPrompt], {
       json: true,
     });
-
     return JSON.parse(result.content);
   }
 }

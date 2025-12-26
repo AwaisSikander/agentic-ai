@@ -29,7 +29,9 @@ export async function runOrchestratedAgentCLI() {
       history.push({ role: "user", content: input });
       history = manageHistory(history);
 
-      const answer = await runOrchestratedAgent(history);
+      const answer = await runOrchestratedAgent(history, {
+        useLocal: process.argv.includes("--local"),
+      });
 
       console.log("\nAI:", answer);
 
